@@ -1,0 +1,9 @@
+torch
+torchvision
+tqdm
+numpy
+pillow
+opencv-python
+gTTS
+# 1.3.0 has known problems on Windows; 1.2.2 is the commonly used version
+playsound==1.2.2

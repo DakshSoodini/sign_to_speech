@@ -15,20 +15,31 @@ print(f"🚀 Using device: {device}")
 if torch.cuda.is_available():
     print("🟢 CUDA is available:", torch.cuda.get_device_name(0))
 
-# Load class names
+# Load class names (written by sign_to_speech.py); fall back to reading the
+# training folder for models trained before that file existed
+CLASSES_PATH = "asl_classes.txt"
 CLASS_DIR = "asl_alphabet/asl_alphabet_train"
+if os.path.exists(CLASSES_PATH):
+    with open(CLASSES_PATH) as f:
+        class_names = [line.strip() for line in f if line.strip()]
+else:
+    class_names = datasets.ImageFolder(root=CLASS_DIR).classes
+print("🧾 Loaded classes:", class_names)
+
+# Must match the validation transform used in training, including the
+# ImageNet normalisation the network was fine-tuned with
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
 ])
-dataset = datasets.ImageFolder(root=CLASS_DIR, transform=transform)
-class_names = dataset.classes
-print("🧾 Loaded classes:", class_names)
 
-# Load trained model
-model = models.resnet18(pretrained=True)
+# Load trained model (weights come from our checkpoint, so no need to
+# download the ImageNet ones)
+model = models.resnet18(weights=None)
 model.fc = torch.nn.Linear(model.fc.in_features, len(class_names))
-model.load_state_dict(torch.load("asl_cnn_model.pth", map_location=device))
+model.load_state_dict(torch.load("asl_cnn_model.pth", map_location=device,
+                                 weights_only=True))
 model.to(device)
 model.eval()
 

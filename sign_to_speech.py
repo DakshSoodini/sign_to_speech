@@ -20,6 +20,7 @@ else:
 DATA_DIR = "asl_alphabet/asl_alphabet_train"
 
 MODEL_PATH = "asl_cnn_model.pth"
+CLASSES_PATH = "asl_classes.txt"
 BATCH_SIZE = 32
 EPOCHS = 10
 
@@ -74,6 +75,9 @@ for epoch in range(EPOCHS):
 
     print(f"📉 Epoch {epoch+1} Loss: {running_loss/len(train_loader):.4f}")
 
-# ✅ Save the model
+# ✅ Save the model, plus the class names in training order so prediction
+# doesn't need the dataset on disk
 torch.save(model.state_dict(), MODEL_PATH)
-print(f"💾 Model saved to {MODEL_PATH}")
+with open(CLASSES_PATH, "w") as f:
+    f.write("\n".join(class_names) + "\n")
+print(f"💾 Model saved to {MODEL_PATH}, classes to {CLASSES_PATH}")

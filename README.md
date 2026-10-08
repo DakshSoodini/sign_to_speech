@@ -2,7 +2,9 @@
 
 A webcam app that recognises American Sign Language (ASL) letters and speaks them aloud. This prototype was a finalist at Negotium.
 
-**Demo:** [demo.mp4](demo.mp4)
+![Live demo: the model recognises the signs for D and L](demo.gif)
+
+Full recording: [demo.mp4](demo.mp4)
 
 ## How it works
 

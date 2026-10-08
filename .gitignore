@@ -1,0 +1,12 @@
+# Dataset and trained weights (large; download/train locally)
+asl_alphabet/
+archive.zip
+*.pth
+
+# Credentials — never commit
+kaggle.json
+
+# Runtime and environment files
+temp_tts.mp3
+.venv/
+__pycache__/
